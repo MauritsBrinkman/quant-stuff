@@ -40,3 +40,17 @@ In general $S_t$ will contain more than just a single asset, hence for $n>1$ and
 multivariate case: $$E[S_t x] = x^T \Gamma x,$$ where $\Gamma$ is the covariance matrix of all our assets. Translating
 this to the next time step, we obtain $$E[S_t A x] = x^T A^T \Gamma A x,$$ from which we find $$\nu(x) = 
 \frac{x^T A^T \Gamma A x}{x^T \Gamma x}.$$
+
+## Fitting the weights
+$A$ can be estimated via a simple Least Squares Regression: $$\hat{A} = (S_{t-1}^T S_{t-1})^{-1} S_{t-1}^T S_t.$$ This 
+we can then use to find the weights $x$ that minimize the predictability of our portfolio. This we do in multiple steps.
+
+First, as the covariance matrix $\Gamma$ is symmetric and positive semi-definite, it is possible the split $\Gamma$ as 
+$\Gamma = \Gamma^{1/2} \Gamma^{1/2}$, and find the square root of the covariance matrix (known as the Cholesky decomposition). Secondly,
+let us define a new vector $z = \Gamma^{1/2} x$, for which we have $x = \Gamma^{-1/2} z$. Plugging this back into the 
+definition of predictability $\nu$ that we have above, we find $$\nu(z) = 
+\frac{z^T \Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2} z}{z^T \Gamma^{-1/2} \Gamma \Gamma^{-1/2} z} = \frac{z^T \Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2} z}{z^T z}.$$ 
+Having a nice and simple denominator, we can still simplify notation of the numerator by defining $B = 
+\Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2}$. Plugging this back into predictability $\nu$ we finally get $$v(z) = 
+\frac{z^T B z}{z^T z}.$$ This is a lot simpler, and so will be the minimization! For that, it suffices to find the 
+eigenvector corresponding to the smallest eigenvalue of $B$. 
