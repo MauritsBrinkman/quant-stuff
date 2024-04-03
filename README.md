@@ -52,6 +52,6 @@ let us define a new vector $z = \Gamma^{1/2} x$, for which we have $x = \Gamma^{
 definition of predictability $\nu$ that we have above, we find $$\nu(z) = 
 \frac{z^T \Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2} z}{z^T \Gamma^{-1/2} \Gamma \Gamma^{-1/2} z} = \frac{z^T \Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2} z}{z^T z}.$$ 
 Having a nice and simple denominator, we can still simplify notation of the numerator by defining $B = 
-\Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2}$. Plugging this back into predictability $\nu$ we finally get $$v(z) = 
+\Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2}$. Plugging this back into predictability $\nu$ we finally get $$\nu(z) = 
 \frac{z^T B z}{z^T z}.$$ This is a lot simpler, and so will be the minimization! For that, it suffices to find the 
 eigenvector corresponding to the smallest eigenvalue of $B$. 
