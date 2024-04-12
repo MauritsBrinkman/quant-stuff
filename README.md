@@ -68,7 +68,7 @@ subtract the last two values to make the series stationary, etcetera.
 ## Greedy search
 So far we have been looking at constructing a mean-reverting portfolio but not a sparse one. We want to find the most mean
 reverting portfolio in our entire asset universe that only contains at most $k$ assets. Let us formulate this problem 
-mathematically: $$\mathop{\arg\min}_{x}\frac{x^T A^T \Gamma A x}{x^T \Gamma x},\qquad \text{Card}(x) \leq k,\, \lVert x \rVert = 1.$$
+mathematically: $$\mathop{\arg\min}_{x}\frac{x^T A^T \Gamma A x}{x^T \Gamma x},\qquad \text{Card}(x) \leq k,\quad \lVert x \rVert = 1.$$
 This makes sure that we find weights that minimize our portfolios predictability while having the number of non-zero elements
 in our vector containing the weights to be smaller or equal to $k$. As usual, one would maximize (instead of minimize) to obtain
 a momentum portfolio.
