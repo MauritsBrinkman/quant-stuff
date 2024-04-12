@@ -14,7 +14,8 @@ Being sparse means that we don't want to have many assets. There are a few reaso
 Generally the more assets our portfolio has, the more mean reverting it is but the less volatile it is. We would like to 
 find the golden middle of mean reverting and volatile enough while still being stable.
 
-The set-up of this code was inspired by [this article of Alex D'Aspremont](https://arxiv.org/pdf/0708.3048.pdf). Now,
+The set-up of this code was inspired by [this article of Alex D'Aspremont](https://arxiv.org/pdf/0708.3048.pdf). Nevertheless, the explanation below should be
+self-containing enough to understand the necessary theory to follow along with the provided code. Now,
 let's have some free lunch!
 
 ## The portfolio
@@ -67,7 +68,7 @@ subtract the last two values to make the series stationary, etcetera.
 ## Greedy search
 So far we have been looking at constructing a mean-reverting portfolio but not a sparse one. We want to find the most mean
 reverting portfolio in our entire asset universe that only contains at most $k$ assets. Let us formulate this problem 
-mathematically: $$\mathop{\arg\min}_{x}\frac{x^T A^T \Gamma A x}{x^T \Gamma x},\qquad \text{Card}(x) \leq k,\, \| x \| = 1.$$
+mathematically: $$\mathop{\arg\min}_{x}\frac{x^T A^T \Gamma A x}{x^T \Gamma x},\qquad \text{Card}(x) \leq k,\, \lVert x \rVert = 1.$$
 This makes sure that we find weights that minimize our portfolios predictability while having the number of non-zero elements
 in our vector containing the weights to be smaller or equal to $k$. As usual, one would maximize (instead of minimize) to obtain
 a momentum portfolio.
@@ -78,4 +79,15 @@ of the algorithm that we can employ for this objective is called Greedy Search. 
 1. Use a brute force technique to get the most mean-revering pair of assets
 2. Add one asset that will yield the most mean reverting triplet
 3. Continue adding assets in this way until you reach $k$ number of assets
+
+### Brute force to obtain best pair
+To start out Greedy Search, we use brute force to find the most mean-reverting pair. For practicality -- under the realm of
+diversification --  we also add the constraint that the weight assigned to a single asset should not be over 80%, as minimizing
+predictability tends to give weights where often you have 99% or more of the total capital in one single asset, which is 
+obviously not desirable. 
+
+Also, even with a sparse portfolio, it does not make sense to have assets in our portfolio that have a tiny weight assigned 
+to them. Therefore, we propose an additional constraint that the smallest weight in $x$ should be bigger than $1/(a \cdot k)$,
+where $a$ is a parameter that determines the lower bound for the weight minimum. For example, when the goal is to construct
+a portfolio of at maximum $k = 5$ assets, then $a=4$ ensures that each asset has a weight of at least 5%.
 
