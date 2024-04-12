@@ -3,6 +3,7 @@
 import numpy as np
 from scipy.linalg import sqrtm
 
+
 def compute_weights(S):
     """Function that outputs portfolio weights, covariance, predictability, eigenvalues and eigenvectors.
 
@@ -39,3 +40,22 @@ def compute_weights(S):
     x /= sum(abs(x[:, 0]))
 
     return x, A, C, C_sqrt_inv, eig_values, eig_vectors
+
+
+def bring_back_mean(S, S_original, x):
+    """Re-means the portfolio that had mean equal to zero.
+
+    Keyword arguments:
+    - S: ndarray (n, m): array having 0 mean, where n is the number of assets and m is the number of time steps.
+    - S_original (n, m): array before setting mean to 0.
+    - x: ndarray (n): array containing portfolio weights.
+    """
+
+    P = [1]
+    for i in range(len(S[0]) - 1):
+        rets = (S_original[:, i + 1] - S_original[:, i]) / S_original[:, i]
+
+        P.append(P[i] * (1 + (rets @ x)[0]))
+
+    return P
+
