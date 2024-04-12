@@ -4,6 +4,7 @@ from scipy.linalg import sqrtm
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
+from utils import compute_weights
 matplotlib.use('TkAgg')
 sns.set(style="whitegrid", context="notebook")
 
@@ -27,20 +28,7 @@ S_original = np.vstack(list(hourly_data.values()))
 mean = np.nanmean(S_original, axis=1)
 S = S_original - mean[:, np.newaxis]
 
-# Fit A matrix using least squares (note that '@' is equivalent to using np.matmul)
-A = np.linalg.inv(S[:, :-1] @ S[:, :-1].T) @ (S[:, :-1] @ S[:, 1:].T)
-
-# Compute covariance matrix and its Cholesky decomposition
-C = np.cov(S)
-C_sqrt = sqrtm(C)
-
-# Compute B matrix for optimization problem
-C_sqrt_inv = np.linalg.inv(C_sqrt)
-B = C_sqrt_inv @ A.T @ C @ A @ C_sqrt_inv
-
-# Get eigenvalues and eigenvectors of B
-eig = np.linalg.eig(B)
-eig_values, eig_vectors = eig[0], eig[1]
+x, A, C, C_sqrt_inv, eig_values, eig_vectors = compute_weights(S)
 
 # First eigenvalue is smallest, second eigenvalue is largest
 z_mr = eig_vectors[:, 0]  # Mean reversion vector
