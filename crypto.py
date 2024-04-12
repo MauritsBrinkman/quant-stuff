@@ -4,7 +4,7 @@ from scipy.linalg import sqrtm
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
-from utils import compute_weights
+from utils import compute_weights, bring_back_mean
 matplotlib.use('TkAgg')
 sns.set(style="whitegrid", context="notebook")
 
@@ -47,13 +47,8 @@ P_mr = (x_mr.T @ S)[0]
 P_mom = (x_mom.T @ S)[0]
 
 # Re-mean our assets
-P_mr_value = [1]
-P_mom_value = [1]
-for i in range(len(S[0])-1):
-    rets = (S_original[:, i+1] - S_original[:, i])/S_original[:, i]
-
-    P_mr_value.append(P_mr_value[i] * (1 + (rets @ x_mr)[0]))
-    P_mom_value.append(P_mom_value[i] * (1 + (rets @ x_mom)[0]))
+P_mr_value = bring_back_mean(S, S_original, x_mr)
+P_mom_value = bring_back_mean(S, S_original, x_mom)
 
 # Create figure with four subplots
 fig, axes = plt.subplots(2, 2)
@@ -76,6 +71,7 @@ for ax in axes.flatten():
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', va='top')
     ax.set_ylabel('Portfolio Value')
 
+plt.suptitle('Example Crypto Portfolio', fontsize=15, fontweight='bold')
 plt.tight_layout()
 plt.show()
 
