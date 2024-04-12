@@ -54,4 +54,28 @@ definition of predictability $\nu$ that we have above, we find $$\nu(z) =
 Having a nice and simple denominator, we can still simplify notation of the numerator by defining $B = 
 \Gamma^{-1/2} A^T \Gamma A \Gamma^{-1/2}$. Plugging this back into predictability $\nu$ we finally get $$\nu(z) = 
 \frac{z^T B z}{z^T z}.$$ This is a lot simpler, and so will be the minimization! For that, it suffices to find the 
-eigenvector corresponding to the smallest eigenvalue of $B$. 
+eigenvector corresponding to the smallest eigenvalue of $B$. Our final portfolio weights will then be $$x = \Gamma^{-1/2} z.$$
+Alternatively, one can create a portfolio that is as predictable as possible, having as much momentum as possible, by using the eigenvector corresponding 
+to the biggest eigenvalue of $B$.
+
+## Johansen procedure
+This procedure can be used to test if multiple L(1) time series are co-integrated or not. L(1) refers to the lag of the
+autoregressive processes: if it is L(1), then it means that if you would subtract the last value from your time series
+and subtract it from the current value, then your time series becomes stationary. Similarly, L(2) would mean you need to 
+subtract the last two values to make the series stationary, etcetera.
+
+## Greedy search
+So far we have been looking at constructing a mean-reverting portfolio but not a sparse one. We want to find the most mean
+reverting portfolio in our entire asset universe that only contains at most $k$ assets. Let us formulate this problem 
+mathematically: $$\mathop{\arg\min}_{x}\frac{x^T A^T \Gamma A x}{x^T \Gamma x},\qquad \text{Card}(x) \leq k,\, \| x \| = 1.$$
+This makes sure that we find weights that minimize our portfolios predictability while having the number of non-zero elements
+in our vector containing the weights to be smaller or equal to $k$. As usual, one would maximize (instead of minimize) to obtain
+a momentum portfolio.
+
+The optimization problem is NP-hard. Therefore, we aim for a suboptimal solution that is still good and fast enough. One 
+of the algorithm that we can employ for this objective is called Greedy Search. In short, this algorithm does the following:
+
+1. Use a brute force technique to get the most mean-revering pair of assets
+2. Add one asset that will yield the most mean reverting triplet
+3. Continue adding assets in this way until you reach $k$ number of assets
+
